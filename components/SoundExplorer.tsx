@@ -36,7 +36,7 @@ export default function SoundExplorer() {
     // Create and resume audio context on user interaction
     try {
       // Force audio context creation on user interaction
-      const AudioContext = window.AudioContext || window?.webkitAudioContext;
+      const AudioContext = window.AudioContext;
       audioContextRef.current = new AudioContext();
       
       // Resume the context immediately while we have user interaction
@@ -79,7 +79,7 @@ export default function SoundExplorer() {
     
     // Create a single audio context for the entire sequence
     try {
-      const AudioContext = window.AudioContext || window?.webkitAudioContext;
+      const AudioContext = window.AudioContext;
       const audioContext = new AudioContext();
       
       let currentTime = audioContext.currentTime;
