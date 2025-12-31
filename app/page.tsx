@@ -1,143 +1,112 @@
-'use client';
-import { useState } from 'react';
-import PitchDetector from '../components/PitchDetector';
-import Quiz from '../components/Quiz';
-import PitchQuiz from '../components/PitchQuiz';
-import KeyFinder from '../components/KeyFinder';
-import SoundExplorer from '../components/SoundExplorer';
-import Progress from '../components/Progress';
-
+"use client";
+import Link from "next/link";
+import { IoMdMusicalNote } from "react-icons/io";
+import { RiArrowRightSLine } from "react-icons/ri";
+import { TiMediaPlay } from "react-icons/ti";
+import { GiMusicalNotes, GiMusicalScore } from "react-icons/gi";
+import { FaKey } from "react-icons/fa";
 
 export default function Home() {
-  const [currentView, setCurrentView] = useState('quiz');
-  const [stats, setStats] = useState({
-    correct: 0,
-    total: 0,
-    streak: 0,
-    bestStreak: 0,
-  });
-
-  const updateStats = (isCorrect: any) => {
-    setStats(prev => {
-      const newStreak = isCorrect ? prev.streak + 1 : 0;
-      return {
-        correct: prev.correct + (isCorrect ? 1 : 0),
-        total: prev.total + 1,
-        streak: newStreak,
-        bestStreak: Math.max(prev.bestStreak, newStreak),
-      };
-    });
-  };
-
-// In your main page component, update the trainingModes array:
-const trainingModes = [
-  {
-    id: 'soundExplorer',
-    title: 'Sound Explorer',
-    description: 'Test and learn all note sounds',
-    icon: '🔊',
-    component: <SoundExplorer />
-  },
-  {
-    id: 'quiz',
-    title: 'Note Identification Quiz',
-    description: 'Identify played notes',
-    icon: '🎵',
-    component: <Quiz onAnswer={updateStats} />
-  },
-  {
-    id: 'pitchQuiz',
-    title: 'Pitch Matching Quiz',
-    description: 'Sing target notes accurately',
-    icon: '🎤',
-    component: <PitchQuiz onAnswer={updateStats} />
-  },
-  {
-    id: 'detector',
-    title: 'Pitch Detector',
-    description: 'See what note you\'re singing',
-    icon: '🔍',
-    component: <PitchDetector />
-  },
-  {
-    id: 'keyFinder',
-    title: 'Song Key Finder',
-    description: 'Discover the key of any song',
-    icon: '🎼',
-    component: <KeyFinder />
-  }
-];
-
-  const getCurrentComponent = () => {
-    const mode = trainingModes.find(m => m.id === currentView);
-    return mode ? mode.component : null;
-  };
-
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-6xl mx-auto">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Perfect Pitch Trainer
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Develop your perfect pitch through interactive exercises
-          </p>
-        </header>
-        <div className="bg-white rounded-lg shadow-md p-6 my-6">
-              <h3 className="text-lg font-semibold mb-4">Training Modes</h3>
-              <div className="space-y-3 lg:flex gap-2">
-                {trainingModes.map(mode => (
-                  <button
-                    key={mode.id}
-                    onClick={() => setCurrentView(mode.id)}
-                    className={`w-full text-left p-4 rounded-lg transition-all duration-200 ${
-                      currentView === mode.id 
-                        ? 'bg-blue-100 border-2 border-blue-500 shadow-sm' 
-                        : 'bg-gray-50 hover:bg-gray-100 border-2 border-transparent'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <span className="text-2xl">{mode.icon}</span>
-                      <div>
-                        <div className="font-medium text-slate-900">{mode.title}</div>
-                        <div className="text-sm text-gray-600">{mode.description}</div>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-          <div className="xl:col-span-3 space-y-6">
-            {getCurrentComponent()}
-          </div>
-          
-          <div className="space-y-6">
-            <Progress stats={stats} />
-
-            {/* Quick Stats */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-3">Today's Progress</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Exercises Completed:</span>
-                  <span className="font-semibold">{stats.total}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Current Streak:</span>
-                  <span className="font-semibold text-orange-600">{stats.streak}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Best Streak:</span>
-                  <span className="font-semibold text-purple-600">{stats.bestStreak}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="md:w-[90%] px-6 md:px-0 md:mx-auto ">
+      <div className="text-[10rem]  mx-auto text-center flex w-full justify-center">
+        <GiMusicalScore />
       </div>
-    </main>
+      <div className="text-center mt-6">
+        <h1 className="md:text-[2.5rem] text-xl font-semibold">
+          Hi there, Maestro!
+        </h1>
+        <p className="md:text-lg mt-3 text-sm">
+          Train your ear to identify any note, anywhere. Ready to start your
+          session?
+        </p>
+      </div>
+      <div className="grid md:grid-cols-2 md:w-[80%] mx-auto mt-10">
+        <Link
+          href="/quiz"
+          className="group w-full p-1 bg-gradient-to-r from-surface-dark to-card-dark rounded-xl hover:from-primary/20 hover:to-surface-dark transition-all duration-300"
+        >
+          <div className="flex items-center gap-4 bg-background-dark/50 backdrop-blur-sm p-4 rounded-xl order border-white/5 group-hover:border-primary/30 transition-colors">
+            <div className="md:size-14 size-12 md:text-2xl rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+              <IoMdMusicalNote />
+            </div>
+            <div className="flex-1 text-left">
+              <h4 className="text-white font-bold md:text-base text-sm">
+                Pitch Quiz
+              </h4>
+              <p className="text-text-muted md:text-sm text-xs">
+                Test your ear with random notes
+              </p>
+            </div>
+            <span className="md:text-[1.8rem]">
+              <RiArrowRightSLine />
+            </span>
+          </div>
+        </Link>
+        <Link
+          href="/vocal-lesson"
+          className="group w-full p-1 bg-gradient-to-r from-surface-dark to-card-dark rounded-xl hover:from-primary/20 hover:to-surface-dark transition-all duration-300"
+        >
+          <div className="flex items-center gap-4 bg-background-dark/50 backdrop-blur-sm p-4 rounded-xl border border-white/5 group-hover:border-blue-400/30 transition-colors">
+            <div className="md:size-14 size-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-300 text-[1.8rem]">
+              <GiMusicalNotes />
+            </div>
+            <div className="flex-1 text-left">
+              <h4 className="text-white font-bold md:text-base text-sm">
+                Vocal Gym
+              </h4>
+              <p className="text-text-muted md:text-sm text-xs">
+                Sing the correct note
+              </p>
+            </div>
+            <span className="md:text-[1.8rem]">
+              <RiArrowRightSLine />
+            </span>
+          </div>
+        </Link>
+        <Link
+          href="/playground"
+          className="group w-full p-1 bg-gradient-to-r from-surface-dark to-card-dark rounded-xl hover:from-primary/20 hover:to-surface-dark transition-all duration-300"
+        >
+          <div className="flex items-center gap-4 bg-background-dark/50 backdrop-blur-sm p-4 rounded-xl border border-white/5 group-hover:border-purple-400/30 transition-colors">
+            <div className="md:size-14 size-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform duration-300 text-[1.8rem]">
+              <TiMediaPlay />
+            </div>
+            <div className="flex-1 text-left">
+              <h4 className="text-white font-bold md:text-base text-sm">
+                Playground
+              </h4>
+              <p className="text-text-muted md:text-sm text-xs ">
+                <span>Know your notes</span>
+              </p>
+            </div>
+            <span className="md:text-[1.8rem]">
+              <RiArrowRightSLine />
+            </span>
+          </div>
+        </Link>
+        <Link
+          href="/keyfinder"
+          className="group w-full p-1 bg-gradient-to-r from-surface-dark to-card-dark rounded-xl hover:from-primary/20 hover:to-surface-dark transition-all duration-300"
+        >
+          <div className="flex items-center gap-4 bg-background-dark/50 backdrop-blur-sm p-4 rounded-xl border border-white/5 group-hover:border-yellow-400/30 transition-colors">
+            <div className="md:size-14 size-12 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-400 group-hover:scale-110 transition-transform duration-300 text-[1.8rem]">
+              <FaKey />
+            </div>
+            <div className="flex-1 text-left">
+              <h4 className="text-white font-bold md:text-base text-sm">
+                Key Finder
+              </h4>
+              <p className="text-text-muted md:text-sm text-xs">
+                <span>Find your key</span>
+              </p>
+            </div>
+            <span className="md:text-[1.8rem]">
+              <RiArrowRightSLine />
+            </span>
+          </div>
+        </Link>
+      </div>
+    </div>
   );
 }
