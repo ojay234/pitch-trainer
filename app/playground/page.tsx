@@ -22,7 +22,7 @@ export default function PitchPlayground() {
           setHistory((prev) => {
             const last = prev[prev.length - 1];
             if (last !== note.name) {
-              return [...prev.slice(-7), note.name]; // Keep last 8 notes
+              return [...prev.slice(-7), note.name];
             }
             return prev;
           });
@@ -39,7 +39,6 @@ export default function PitchPlayground() {
 
   return (
     <div className="text-white p-6 flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Background Ambience */}
       <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-green-500 rounded-full blur-[100px]"></div>
         <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500 rounded-full blur-[100px]"></div>
@@ -49,7 +48,6 @@ export default function PitchPlayground() {
         Pitch Playground
       </h1>
 
-      {/* Main Display */}
       <div className="relative z-10 mb-12 text-center">
         <div className="text-[10rem] font-black leading-none bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-600 transition-all duration-100">
           {currentNote ? currentNote.name : "..."}
@@ -59,7 +57,6 @@ export default function PitchPlayground() {
         </div>
       </div>
 
-      {/* Note Trail (History) */}
       <div className="flex gap-4 items-center h-24 z-10">
         {history.map((note, i) => (
           <div

@@ -102,7 +102,6 @@ export default function VocalLesson() {
         </div>
       </div>
 
-      {/* --- TUNER UI --- */}
       <div className="relative w-full aspect-square max-w-[280px] mb-8 bg-[#1A2C26] rounded-full border-4 border-[#2A4C46] shadow-2xl flex flex-col items-center justify-center overflow-hidden">
         <div
           className={`absolute inset-0 transition-all duration-300 ${
@@ -127,7 +126,6 @@ export default function VocalLesson() {
           </div>
         </div>
 
-        {/* Needle Area */}
         <div className="absolute inset-x-0 bottom-6 h-28 flex items-end justify-center">
           <div className="absolute bottom-0 w-64 h-32 border-t border-gray-600/50 rounded-t-full"></div>
 
@@ -146,7 +144,6 @@ export default function VocalLesson() {
         </div>
       </div>
 
-      {/* --- FEEDBACK BOX --- */}
       <div
         className={`w-full max-w-md rounded-2xl p-5 border transition-colors duration-300 mb-6 shadow-lg ${
           matchStatus === "match"

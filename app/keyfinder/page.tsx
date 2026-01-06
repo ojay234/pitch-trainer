@@ -125,9 +125,7 @@ export default function KeyFinder() {
           Sing a melody (Do-Re-Mi...) clearly. We'll ignore the shaky notes.
         </p>
 
-        {/* Visualization of Recorded Notes */}
         <div className="bg-[#1A2C26] rounded-2xl p-6 min-h-[200px] mb-8 border border-[#2A4C46] flex flex-col justify-between">
-          {/* Locked Notes Area */}
           <div className="flex flex-wrap content-start gap-2 mb-4">
             {detectedNotes.size === 0 && !pendingNote ? (
               <span className="text-gray-600 italic w-full text-center mt-4">
@@ -147,7 +145,6 @@ export default function KeyFinder() {
             )}
           </div>
 
-          {/* Pending Note Indicator (The "Ghost" Note) */}
           {isRecording && (
             <div className="h-12 border-t border-gray-700 flex items-center justify-center">
               {pendingNote ? (
@@ -166,7 +163,6 @@ export default function KeyFinder() {
           )}
         </div>
 
-        {/* Result Display */}
         {likelyKey && !isRecording && (
           <div className="text-center mb-8 animate-in slide-in-from-bottom duration-500">
             <div className="text-gray-400 text-sm uppercase tracking-widest mb-2">
@@ -175,11 +171,9 @@ export default function KeyFinder() {
             <div className="text-6xl font-black text-white bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
               {likelyKey} <span className="text-2xl text-gray-500">Major</span>
             </div>
-            {/*  - Diagram of the major scale for the detected key */}
           </div>
         )}
 
-        {/* Control Button */}
         <button
           onClick={toggleRecording}
           className={`w-full py-5 rounded-2xl font-bold text-xl shadow-lg transition-all transform active:scale-95 ${

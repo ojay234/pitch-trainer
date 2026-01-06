@@ -25,10 +25,10 @@ interface Question {
 export default function QuizPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [stats, setStats] = useState({ streak: 5, score: 0 }); // Starting streak 5 per image
+  const [stats, setStats] = useState({ streak: 5, score: 0 }); 
   const [isFinished, setIsFinished] = useState(false);
 
-  // Initialize 24 Questions (12 of each)
+
   useEffect(() => {
     const identifyQs = NOTES.map((note, i) => ({
       id: i,
@@ -105,7 +105,7 @@ export default function QuizPage() {
           </div>
         </div>
 
-        {/* Progress Bar Track */}
+
         <div className="h-2 w-full bg-[#1A2C26] rounded-full mb-8 overflow-hidden">
           <div
             className="h-full bg-green-500 transition-all duration-500 ease-out"

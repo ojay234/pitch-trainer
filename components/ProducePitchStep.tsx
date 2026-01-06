@@ -13,11 +13,11 @@ export default function ProducePitchStep({
 }: ProducePitchStepProps) {
   const [userFreq, setUserFreq] = useState(0);
   const [userNoteName, setUserNoteName] = useState<string>("---");
-  const [displayCents, setDisplayCents] = useState(0); // For the needle
+  const [displayCents, setDisplayCents] = useState(0);
   const [matchStatus, setMatchStatus] = useState<"neutral" | "close" | "match">(
     "neutral"
   );
-  const [octaveDiff, setOctaveDiff] = useState(0); // Track if they are singing too low/high
+  const [octaveDiff, setOctaveDiff] = useState(0);
 
   const { createPitchDetector } = usePitchDetection();
   const { playNote } = useAudioPlayer();
@@ -29,51 +29,40 @@ export default function ProducePitchStep({
     return () => stopListening();
   }, [targetNote]);
 
-  // Helper: Convert Frequency to Note Number (MIDI style)
   const getNoteNumber = (freq: number) => {
     return 12 * Math.log2(freq / 440) + 69;
   };
 
   const handleNoteDetected = (note: any, pitch: number) => {
-    if (!pitch || pitch < 50) return; // Ignore low noise
+    if (!pitch || pitch < 50) return;
 
     setUserFreq(pitch);
 
-    // 1. Calculate the Note Numbers
     const targetNum = getNoteNumber(targetNote.frequency);
     const userNum = getNoteNumber(pitch);
 
-    // 2. Find difference in semitones
     const diff = userNum - targetNum;
-    const roundedDiff = Math.round(diff); // Integer semitone difference
+    const roundedDiff = Math.round(diff);
 
-    // 3. Determine if it is the correct "Class" of note (ignoring Octave)
     const isCorrectNoteClass = Math.abs(roundedDiff) % 12 === 0;
 
-    // 4. Calculate Cents relative to the CLOSEST semitone user is singing
     const centsOff = (diff - roundedDiff) * 100;
 
-    // --- FIX 1: Smooth the needle (Averaging) ---
     setDisplayCents((prev) => prev * 0.5 + centsOff * 0.5);
 
-    // 5. Update UI Name
     if (note && note.name) {
       setUserNoteName(note.name);
     }
 
-    // 6. Check for Success
     if (isCorrectNoteClass) {
       const currentOctaveDiff = Math.round(diff / 12);
       setOctaveDiff(currentOctaveDiff);
 
-      // --- FIX 2: Wider Tolerance (40 cents) ---
       if (Math.abs(centsOff) <= 40) {
         setMatchStatus("match");
 
-        // --- FIX 3: Magnetic Snap (Force Center) ---
         setDisplayCents(0);
 
-        // Wait 0.8 seconds to confirm it wasn't a glitch
         if (!successTimer.current) {
           successTimer.current = setTimeout(() => {
             stopListening();
@@ -81,7 +70,6 @@ export default function ProducePitchStep({
           }, 800);
         }
       } else {
-        // Right note, but out of tune
         setMatchStatus("close");
         if (successTimer.current) {
           clearTimeout(successTimer.current);
@@ -89,7 +77,6 @@ export default function ProducePitchStep({
         }
       }
     } else {
-      // Wrong note entirely
       setMatchStatus("neutral");
       setOctaveDiff(0);
       if (successTimer.current) {
@@ -111,7 +98,6 @@ export default function ProducePitchStep({
     if (successTimer.current) clearTimeout(successTimer.current);
   };
 
-  // Clamp needle for visuals
   const needleRotation = Math.max(-45, Math.min(45, displayCents));
 
   return (
@@ -120,9 +106,7 @@ export default function ProducePitchStep({
         <h2 className="text-3xl font-bold text-white mb-2">Sing this note</h2>
       </div>
 
-      {/* --- TUNER UI --- */}
       <div className="relative w-full aspect-square max-w-[280px] mb-8 bg-[#1A2C26] rounded-full border-4 border-[#2A4C46] shadow-2xl flex flex-col items-center justify-center overflow-hidden">
-        {/* Glow Effects */}
         <div
           className={`absolute inset-0 transition-all duration-300 ${
             matchStatus === "match"
@@ -142,24 +126,19 @@ export default function ProducePitchStep({
             )}
           </div>
 
-          {/* Show Target Frequency */}
           <div className="text-gray-400 font-mono text-xs mt-2">
             {targetNote.frequency.toFixed(0)} Hz
           </div>
         </div>
 
-        {/* --- NEEDLE AREA --- */}
         <div className="absolute inset-x-0 bottom-6 h-28 flex items-end justify-center">
-          {/* Gauge Background */}
           <div className="absolute bottom-0 w-64 h-32 border-t border-gray-600/50 rounded-t-full"></div>
 
-          {/* Ticks */}
           <div className="absolute bottom-0 w-6 h-6 bg-green-500/20 rounded-t-full z-0 blur-sm"></div>
           <div className="absolute bottom-0 w-0.5 h-5 bg-green-500 z-10"></div>
           <div className="absolute bottom-0 w-0.5 h-3 bg-gray-500 left-16 rotate-[-45deg] origin-bottom"></div>
           <div className="absolute bottom-0 w-0.5 h-3 bg-gray-500 right-16 rotate-[45deg] origin-bottom"></div>
 
-          {/* The Needle */}
           <div
             className="w-1.5 h-24 origin-bottom rounded-full transition-transform duration-300 ease-out z-20 relative"
             style={{
@@ -180,7 +159,6 @@ export default function ProducePitchStep({
         </div>
       </div>
 
-      {/* --- FEEDBACK BAR --- */}
       <div
         className={`w-full rounded-2xl p-5 border transition-colors duration-300 mb-6 shadow-lg ${
           matchStatus === "match"
@@ -204,7 +182,7 @@ export default function ProducePitchStep({
             <span className="text-4xl font-bold text-white">
               {userNoteName}
             </span>
-            {/* Show relative octave if detected */}
+
             {matchStatus !== "neutral" && octaveDiff !== 0 && (
               <span className="px-2 py-0.5 rounded bg-gray-700 text-gray-300 text-xs">
                 {octaveDiff > 0 ? `+${octaveDiff} Oct` : `${octaveDiff} Oct`}
